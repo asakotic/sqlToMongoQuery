@@ -14,6 +14,7 @@ public class MainFrame extends JFrame {
     private JTable jTable;
     private JButton btnStart;
     private JTextArea taQuery;
+    private JLabel lblMessage;
 
     private MainFrame() {
 
@@ -40,11 +41,15 @@ public class MainFrame extends JFrame {
         this.setTitle("BP");
 
         JPanel panel = new JPanel();
+        JPanel mini = new JPanel();
         BorderLayout borderLayout = new BorderLayout();
         panel.setLayout(borderLayout);
+        lblMessage = new JLabel();
         btnStart = new JButton("Submit");
         taQuery = new JTextArea("Write something");
-        panel.add(btnStart,BorderLayout.NORTH);
+        mini.add(lblMessage);
+        mini.add(btnStart);
+        panel.add(mini,BorderLayout.NORTH);
         panel.add(taQuery,BorderLayout.CENTER);
 
         jTable = new JTable();
