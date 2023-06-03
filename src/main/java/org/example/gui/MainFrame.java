@@ -1,12 +1,15 @@
 package org.example.gui;
 
 import lombok.Data;
+import lombok.Getter;
 import org.example.app.AppCore;
+import org.example.controller.StartAction;
 
 import javax.swing.*;
 import java.awt.*;
 
 @Data
+@Getter
 public class MainFrame extends JFrame {
 
     private static MainFrame instance = null;
@@ -64,12 +67,14 @@ public class MainFrame extends JFrame {
         //this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-
+        btnStart.addActionListener(new StartAction());
     }
 
     public void setAppCore(AppCore appCore) {
         this.appCore = appCore;
         this.jTable.setModel(appCore.getTableModel());
     }
+
+
 
 }

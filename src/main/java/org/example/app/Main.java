@@ -14,15 +14,15 @@ public class Main {
         MainFrame mainFrame = MainFrame.getInstance();
         mainFrame.setAppCore(appCore);
         SQLValidator SV = new SQLValidator();
-        System.out.println("Query: ");
+        //System.out.println("Query: ");
 
 
-        while(true){
+       /* while(true){
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             String query = reader.readLine();
             System.out.println(SV.checkSQL(query));
 
-        }
+        }*/
 
 
 
