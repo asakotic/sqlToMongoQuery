@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SQLValidator {
 
-    public List<String> keywords = new ArrayList<>();
+    private List<String> keywords = new ArrayList<>();
 
     public SQLValidator() {
         keywords.add("SELECT");
