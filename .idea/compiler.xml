@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="tim_anasakotic_mehmedalijakariik" />
+        <module name="bp_projekat-tim_anasakotic_mehmedalijakarisik" />
       </profile>
     </annotationProcessing>
   </component>
