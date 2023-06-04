@@ -12,10 +12,10 @@ public class SQLAdapter implements ISQLAdapter{
 
     @Override
     public String getQuery() {
-        return convertSQLQueryToMongoDBQuery(sqlQuery.getQuery());
+        return convertSQLQueryToMongoDBQuery(sqlQuery);
     }
 
-    private String convertSQLQueryToMongoDBQuery(String SQLQuery){
+    private String convertSQLQueryToMongoDBQuery(SQLQuery SQLQuery){
 
         return "";
     }
