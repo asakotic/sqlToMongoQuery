@@ -47,7 +47,7 @@ public class SQLParser {
             }else param.add(arrSQL[i]);
         }
 
-        if (clause != null) {//edge case za poslednji keyword
+        if (clause != null) {//edge case za poslednji keyword test
             clause.params.addAll(param);
         }
         for(Clause c: clauses){
