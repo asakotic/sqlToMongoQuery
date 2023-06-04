@@ -128,6 +128,13 @@ public class SQLValidator {
 
         return true;
     }
+    public boolean checkSQL5(List<Clause> clauses){
+
+        for(Clause c: clauses){
+            if(!c.check()) return false;
+        }
+        return true;
+    }
 
     public List<String> checkAggregate(Clause pom){
 

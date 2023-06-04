@@ -7,7 +7,7 @@ public abstract class Clause {
 
     List<String> params = new ArrayList<>();
 
-    public abstract String collect(String text);
+    public abstract boolean check();
 
     public void clear(){
         for(int i = 0;i< params.size(); i++){

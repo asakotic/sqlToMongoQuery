@@ -37,5 +37,8 @@ public class StartAction extends AbstractAction {
         if(!validator.checkSQL4(clauses))
             MainFrame.getInstance().getLblMessage().setText("error 4");
 
+        if(!validator.checkSQL5(clauses))
+            MainFrame.getInstance().getLblMessage().setText("error 5");
+
     }
 }
