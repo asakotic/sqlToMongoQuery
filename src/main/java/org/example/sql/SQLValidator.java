@@ -1,41 +1,151 @@
 package org.example.sql;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SQLValidator {
 
     private List<String> keywords = new ArrayList<>();
+    private String text;
 
-    public SQLValidator() {
+    public SQLValidator(String text) {
         keywords.add("SELECT");
         keywords.add("FROM");
         keywords.add("JOIN");
         keywords.add("WHERE");
-        keywords.add("GROUP BY");
-        keywords.add("ORDER BY");
+        keywords.add("GROUP");
+        keywords.add("ORDER");
+        this.text = text;
     }
 
-    public String checkSQL(String s){
+    public boolean checkSQL1(){
 
         int global = 0;
 
-        List<String> arrSQL = List.of(s.split(" "));
+        List<String> arrSQL = List.of(text.split(" "));
 
-        if(!s.toLowerCase().contains("from") || !s.toLowerCase().contains("select"))
-            return "ERROR 1";
+        if(!text.toLowerCase().contains("from") || !text.toLowerCase().contains("select"))
+            return false;
 
         for(int i = 0; i<arrSQL.size(); i++){
             if(keywords.contains(arrSQL.get(i).toUpperCase()))
             {
                 int index = keywords.indexOf(arrSQL.get(i).toUpperCase());
-                System.out.println(index+ "! \n");
-                if(global>index) return "ERROR 2";
+                if(global>index) return false;
                 global = index + 1;
             }
         }
 
-        return "Nice";
+        return true;
+    }
+
+
+    public boolean checkSQL2(List<Clause> clauses) {
+        Clause sel = null;
+        Clause gb = null;
+
+        for(Clause c: clauses){
+            if(c instanceof Select)
+                sel = c;
+            if(c instanceof GroupBy)
+                gb = c;
+        }
+
+        List<String> checkAgg = checkAggregate(sel);
+
+        if(checkAgg == null && gb!=null)
+            return false;
+
+        if(checkAgg!=null && gb==null)
+            return false;
+
+        if(checkAgg==null && gb==null)
+            return true;
+
+        if(checkAgg.size() != gb.params.size())
+            return false;
+
+        for (String s : checkAgg){
+            if(!gb.params.contains(s))
+                return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkSQL3(List<Clause> clauses) {
+
+        Clause where = null;
+
+        for(Clause c: clauses){
+            if(c instanceof Where)
+                where = c;
+        }
+
+        if(where==null)
+            return true;
+
+        for(int i = 0; i < where.params.size(); i++){
+            if(where.params.get(i).contains("(") && where.params.get(i).contains(")"))
+                return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkSQL4(List<Clause> clauses) {
+
+        Clause join = null;
+
+        for(Clause c: clauses){
+            if(c instanceof Join)
+                join = c;
+        }
+
+        if(join==null)
+            return true;
+
+        //USING(DEPARTMENT_ID);
+
+        for(int i = 0; i<join.params.size(); i++){
+            if(join.params.get(i).equalsIgnoreCase("using")){
+                if(i+1==join.params.size())
+                    return false;
+
+                if(!join.params.get(i+1).contains("(") || !join.params.get(i+1).contains(")"))
+                    return false;
+
+                break;
+            }
+            if(join.params.get(i).equalsIgnoreCase("on")){
+                if(i+1==join.params.size())
+                    return false;
+            }
+        }
+
+
+
+        return true;
+    }
+
+    public List<String> checkAggregate(Clause pom){
+
+        int flag = 0;
+        List<String> pomList = new ArrayList<>();
+
+        for(int i = 0; i < pom.params.size(); i++){
+            if(pom.params.get(i).contains("(") && pom.params.get(i).contains(")"))
+                flag = 1;
+            else{
+                pomList.add(pom.params.get(i));
+            }
+        }
+
+        if(flag==0)
+            return null;
+        else
+            return pomList;
     }
 
 }

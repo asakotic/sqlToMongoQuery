@@ -13,6 +13,7 @@ public class FactoryUtils {
     static SelectFactory selectFactory = new SelectFactory();
     static OrderByFactory orderByFactory = new OrderByFactory();
     static JoinFactory joinFactory = new JoinFactory();
+    static WhereFactory whereFactory = new WhereFactory();
 
     public static ClauseFactory getFactory(String clauseFactory){
 
@@ -24,6 +25,10 @@ public class FactoryUtils {
             return groupByFactory;
         else if(clauseFactory.equalsIgnoreCase("ORDER"))
             return orderByFactory;
+        else if(clauseFactory.equalsIgnoreCase("WHERE"))
+            return whereFactory;
+        else if(clauseFactory.equalsIgnoreCase("JOIN"))
+            return joinFactory;
 
         return null;
     }
