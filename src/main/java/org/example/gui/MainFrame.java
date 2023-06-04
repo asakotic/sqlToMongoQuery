@@ -62,7 +62,6 @@ public class MainFrame extends JFrame {
         panel.add(jTable,BorderLayout.SOUTH);
         this.add(panel);
 
-
         //this.pack();
         //this.setLocationRelativeTo(null);
         this.setVisible(true);
