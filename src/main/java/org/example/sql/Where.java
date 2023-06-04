@@ -14,7 +14,7 @@ public class Where extends Clause {
 
     @Override
     public boolean check() {
-        if(params.isEmpty() || params == null)return false;
+        if(params == null || params.isEmpty()) return false;
 
         //WHERE customer_id = 6000 OR ( customer_id > 7000 AND last_name = 'Johnson' );
 

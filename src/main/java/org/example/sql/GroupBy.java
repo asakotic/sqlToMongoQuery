@@ -3,7 +3,7 @@ package org.example.sql;
 public class GroupBy extends Clause{
     @Override
     public boolean check() {
-        if(params.isEmpty() || params == null)return false;
+        if(params == null || params.isEmpty()) return false;
 
         return true;
     }

@@ -4,7 +4,7 @@ public class From extends Clause{
 
     @Override
     public boolean check() {
-        if(params.isEmpty() || params == null || params.size()>1) return false;
+        if(params == null || params.isEmpty() || params.size()>1) return false;
 
         return true;
     }

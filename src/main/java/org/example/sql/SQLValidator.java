@@ -33,6 +33,10 @@ public class SQLValidator {
             {
                 int index = keywords.indexOf(arrSQL.get(i).toUpperCase());
                 if(global>index) return false;
+                if(index == 2){
+                    global = index;
+                    continue;
+                }
                 global = index + 1;
             }
         }

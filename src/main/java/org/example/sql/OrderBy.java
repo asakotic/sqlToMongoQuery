@@ -8,8 +8,7 @@ public class OrderBy extends Clause{
     @Override
     public boolean check() {
 
-
-        if(params.isEmpty() || params == null)return false;
+        if(params == null || params.isEmpty())return false;
         if(params.get(0).equalsIgnoreCase("ASC") || params.get(0).equalsIgnoreCase("DESC"))
             return false;
 

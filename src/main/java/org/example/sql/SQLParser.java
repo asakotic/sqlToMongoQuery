@@ -11,6 +11,7 @@ import java.util.Locale;
 public class SQLParser {
 
     static List<String> keywords = new ArrayList<>();
+    private List<String> joinkw = new ArrayList<>();
     private List<Clause> clauses = new ArrayList<>();
     private String text;
 
@@ -22,6 +23,10 @@ public class SQLParser {
         keywords.add("WHERE");
         keywords.add("GROUP");
         keywords.add("ORDER");
+
+        joinkw.add("LEFT");
+        joinkw.add("RIGHT");
+        joinkw.add("FULL");
     }
 
     public List<Clause> solve(){
@@ -29,6 +34,7 @@ public class SQLParser {
         String[] arrSQL = text.split(" ");
         List<String > param = new ArrayList<>();
         Clause clause = null;
+        String kw = null;
 
         for(int i = 0; i< arrSQL.length; i++){
             if(keywords.contains(arrSQL[i].toUpperCase())){
@@ -44,7 +50,17 @@ public class SQLParser {
                         continue;
                     }
                 }
-            }else param.add(arrSQL[i]);
+                if(arrSQL[i].equalsIgnoreCase("JOIN")){
+                    if(kw!= null){
+                        ((Join)clause).setKw(kw);
+                        kw = null;
+                    }
+                }
+
+            }else if(joinkw.contains(arrSQL[i].toUpperCase())){
+                kw = arrSQL[i];
+            }
+            else param.add(arrSQL[i]);
         }
 
         if (clause != null) {//edge case za poslednji keyword test
