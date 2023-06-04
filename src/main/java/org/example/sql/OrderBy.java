@@ -15,7 +15,7 @@ public class OrderBy extends Clause{
 
         for(int i = 0;i<params.size();i++){
             if(!params.get(i).equalsIgnoreCase("ASC") && !params.get(i).equalsIgnoreCase("DESC")){
-                if(i+1 > params.size()){
+                if(i+1 == params.size()){
                     params.add("ASC");
                     break;
                 }
@@ -25,14 +25,17 @@ public class OrderBy extends Clause{
             }
         }
 
+        System.out.println(params);
         return true;
     }
 
     public void shiftRight(List<String> params, int index){
-        params.add(params.get(params.size()-1));
-        for(int i = params.size();i>index;i--){
-            params.set(i,params.get(i-1));
+        params.add("");
+
+        for(int i = params.size()-1;i>index;i--){
+            params.set(i, params.get(i-1));
         }
-        params.set(index,"ASC");
+
+        params.set(index, "ASC");
     }
 }
