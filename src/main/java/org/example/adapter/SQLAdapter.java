@@ -2,6 +2,7 @@ package org.example.adapter;
 
 import org.example.sql.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,9 +36,61 @@ public class SQLAdapter implements ISQLAdapter{
         if(sqlQuery.getGroupBy() != null)
             groupBy = groupByConversion(sqlQuery.getGroupBy(), sqlQuery.getSelect());
 
-        System.out.println(select+"\n"+from+"\n"+orderBy+"\n"+groupBy);
+        sqlQuery.getWhere().getPostfix().add("=");
+        if(sqlQuery.getWhere() != null)
+            where = whereConversion(sqlQuery.getWhere());
+
+        System.out.println(select+"\n"+from+"\n"+orderBy+"\n"+groupBy+"\n"+where);
         return "";
     }
+
+    private String whereConversion(Where where){
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < where.getPostfix().size(); i++){
+            if((!where.isKeyword(where.getPostfix().get(i)) && !where.isOperation(where.getPostfix().get(i)))){
+                System.out.println(where.getPostfix() +" "+i);
+                continue;
+            }else{
+                if(i-2<0){
+                    where.getPostfix().remove(where.getPostfix().size()-1);
+                    break;
+                }
+
+                String first = where.getPostfix().get(i-2);
+                String second = where.getPostfix().get(i-1);
+                String finalS = "";
+
+                if(!where.isOperation(where.getPostfix().get(i))){
+                    finalS ="{" + first + where.getPostfix().get(i) + second +"},";
+                    finalS = finalS.replace("=", ":");
+                }
+                else
+                    finalS = "{\"$" + where.getPostfix().get(i) + "\":[" + first + second + "]},";
+
+                where.getPostfix().set(i-2, finalS);
+
+                for(int k = 0; k<2; k++){
+                    for(int p = i-1; p<where.getPostfix().size()-1;p++){
+                        where.getPostfix().set(p, where.getPostfix().get(p+1));
+                        if(p==where.getPostfix().size()-2){
+                            where.getPostfix().remove(where.getPostfix().size()-1);
+                        }
+                    }
+                }
+
+                i = i-2;
+
+
+            }
+
+            System.out.println(where.getPostfix() +" "+i);
+        }
+
+
+        return where.getPostfix().get(0);
+    }
+
 
     private String groupByConversion(GroupBy groupBy, Select select){
 

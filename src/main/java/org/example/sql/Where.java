@@ -1,8 +1,13 @@
 package org.example.sql;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class Where extends Clause {
 
     private String[] brackets = new String[]{"(", ")"}; // jacina: 3
@@ -80,7 +85,7 @@ public class Where extends Clause {
             return 0;
     }
 
-    private boolean isOperation(String s) {
+    public boolean isOperation(String s) {
         for(int i = 0; i< keywords.length; i++){
             if(keywords[i].equalsIgnoreCase(s))
                 return true;
