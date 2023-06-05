@@ -35,8 +35,35 @@ public class SQLAdapter implements ISQLAdapter{
         if(sqlQuery.getGroupBy() != null)
             groupBy = groupByConversion(sqlQuery.getGroupBy(), sqlQuery.getSelect());
 
+        if(sqlQuery.getJoin() != null)
+            join = joinConversion(sqlQuery.getJoin());
+
         System.out.println(select+"\n"+from+"\n"+orderBy+"\n"+groupBy);
+        System.out.println(join);
         return "";
+    }
+    private String joinConversion(Join join){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{$lookup:{ from: ");
+        sb.append("'" + join.getParams().get(0) + "', ");
+        sb.append("localField: ");
+        if(join.getParams().get(1).equalsIgnoreCase("USING")){
+            sb.append("'" + join.getParams().get(3) + "', ");
+            sb.append("foreignField: ");
+            sb.append("'" + join.getParams().get(3) + "', ");
+            sb.append("as: 'merged'");
+        }else{
+            if(join.getParams().get(2).equals("(")){
+
+            }else {
+                sb.append("'" + join.getParams().get(2) + "', ");
+                sb.append("foreignField: ");
+                sb.append("'" + join.getParams().get(4) + "', ");
+                sb.append("as: 'merged'");
+            }
+        }
+        sb.append("}}, {$unwind: 'merged'}");
+        return sb.toString();
     }
 
     private String groupByConversion(GroupBy groupBy, Select select){
