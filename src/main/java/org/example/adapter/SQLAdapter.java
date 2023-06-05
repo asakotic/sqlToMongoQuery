@@ -37,6 +37,7 @@ public class SQLAdapter implements ISQLAdapter{
             groupBy = groupByConversion(sqlQuery.getGroupBy(), sqlQuery.getSelect());
 
         sqlQuery.getWhere().getPostfix().add("=");
+        sqlQuery.getWhere().getPostfix().add("and");
         if(sqlQuery.getWhere() != null)
             where = whereConversion(sqlQuery.getWhere());
 
@@ -56,7 +57,6 @@ public class SQLAdapter implements ISQLAdapter{
                     where.getPostfix().remove(where.getPostfix().size()-1);
                     break;
                 }
-
                 String first = where.getPostfix().get(i-2);
                 String second = where.getPostfix().get(i-1);
                 String finalS = "";
@@ -81,12 +81,9 @@ public class SQLAdapter implements ISQLAdapter{
 
                 i = i-2;
 
-
             }
 
-            System.out.println(where.getPostfix() +" "+i);
         }
-
 
         return where.getPostfix().get(0);
     }
