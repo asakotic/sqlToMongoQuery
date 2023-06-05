@@ -27,6 +27,12 @@ public class SQLValidator {
 
         if(!text.toLowerCase().contains("from") || !text.toLowerCase().contains("select"))
             return false;
+        int br = 0;
+        for(String s: arrSQL){
+            if(s.equalsIgnoreCase("JOIN")){
+                if(++br>3) return false;
+            }
+        }
 
         for(int i = 0; i<arrSQL.size(); i++){
             if(keywords.contains(arrSQL.get(i).toUpperCase()))

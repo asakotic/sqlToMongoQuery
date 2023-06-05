@@ -29,6 +29,8 @@ public class SQLAdapter implements ISQLAdapter{
         String groupBy = "";
         String where = "";
         String join = "";
+        String join2 = "";
+        String join3 = "";
 
         if(sqlQuery.getOrderBy() != null)
             orderBy = orderByConversion(sqlQuery.getOrderBy());
@@ -36,8 +38,8 @@ public class SQLAdapter implements ISQLAdapter{
         if(sqlQuery.getGroupBy() != null)
             groupBy = groupByConversion(sqlQuery.getGroupBy(), sqlQuery.getSelect());
 
-        sqlQuery.getWhere().getPostfix().add("=");
-        sqlQuery.getWhere().getPostfix().add("and");
+        //sqlQuery.getWhere().getPostfix().add("=");
+        //sqlQuery.getWhere().getPostfix().add("and");
         if(sqlQuery.getWhere() != null)
             where = whereConversion(sqlQuery.getWhere());
 
@@ -45,8 +47,16 @@ public class SQLAdapter implements ISQLAdapter{
         if(sqlQuery.getJoin() != null)
             join = joinConversion(sqlQuery.getJoin());
 
+        if(sqlQuery.getJoin2() != null)
+            join2 = joinConversion(sqlQuery.getJoin2());
+
+        if(sqlQuery.getJoin3() != null)
+            join3 = joinConversion(sqlQuery.getJoin3());
+
         System.out.println(select+"\n"+from+"\n"+orderBy+"\n"+groupBy);
         System.out.println(join);
+        System.out.println(join2);
+        System.out.println(join3);
         return "";
     }
     private String joinConversion(Join join){

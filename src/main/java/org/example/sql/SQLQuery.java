@@ -11,6 +11,8 @@ public class SQLQuery {
     private Select select = null;
     private From from = null;
     private Join join = null;
+    private Join join2 = null;
+    private Join join3 = null;
     private Where where = null;
     private GroupBy groupBy = null;
     private OrderBy orderBy = null;
@@ -22,8 +24,14 @@ public class SQLQuery {
                 this.select = (Select) c;
             if(c instanceof From)
                 this.from = (From) c;
-            if(c instanceof Join)
-                this.join = (Join) c;
+            if(c instanceof Join){
+                if(this.join == null)
+                    this.join = (Join) c;
+                else if(this.join2 == null)
+                    this.join2 = (Join) c;
+                else
+                    this.join3 = (Join) c;
+            }
             if(c instanceof Where)
                 this.where = (Where) c;
             if(c instanceof GroupBy)
