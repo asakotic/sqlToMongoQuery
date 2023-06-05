@@ -42,35 +42,26 @@ public class SQLAdapter implements ISQLAdapter{
     private String groupByConversion(GroupBy groupBy, Select select){
 
         StringBuilder sb = new StringBuilder();
-
-
-
         sb.append("{\"$group\" : {_id: {");
-
-        StringBuilder params = new StringBuilder();
-
 
         for(int i = 0; i < groupBy.getParams().size(); i++){
             if(i==groupBy.getParams().size()-1){
-                sb.append(groupBy.getParams().get(i) + ": \"$" + groupBy.getParams().get(i) + "\"}, ");
+                sb.append(groupBy.getParams().get(i) + ": \"$" + groupBy.getParams().get(i) + "\"}}, ");
             }else{
                 sb.append(groupBy.getParams().get(i) + ": \"$" + groupBy.getParams().get(i) + "\",");
             }
         }
-
 
         for(String s : select.getParams()){
             String agg = "";
             agg = checkAggregation(s);
             if(!agg.equals("")){
                 String pom = s.substring(s.indexOf("(")+1, s.length()-1);
-                sb.append("\""+agg+"\": {$"+agg+":" + pom + "\"}, ");
-
+                sb.append("\""+agg+"\": {\"$"+agg+":" + pom + "\"}, ");
             }
         }
 
         sb.replace(sb.length()-2, sb.length()-1, "}");
-
 
         return sb.toString();
     }
