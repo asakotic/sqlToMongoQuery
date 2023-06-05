@@ -47,6 +47,7 @@ public class Where extends Clause {
                         stack.remove(k);
                     }
                 }
+
             }
 
             stack.add(params.get(i));
@@ -69,6 +70,10 @@ public class Where extends Clause {
                 }
             }
 
+        }
+
+        for(int i = stack.size() - 1; i >= 0; i--){
+            postfix.add(stack.get(i));
         }
 
         System.out.println(postfix);
