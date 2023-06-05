@@ -117,7 +117,7 @@ public class SQLValidator {
                 if(i+1==join.params.size())
                     return false;
 
-                if(!join.params.get(i+1).contains("(") || !join.params.get(i+1).contains(")"))
+                if(!join.params.get(i+1).contains("("))
                     return false;
 
                 break;
