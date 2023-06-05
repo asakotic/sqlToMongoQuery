@@ -1,8 +1,10 @@
 package org.example.controller;
 
+import org.example.adapter.SQLAdapter;
 import org.example.gui.MainFrame;
 import org.example.sql.Clause;
 import org.example.sql.SQLParser;
+import org.example.sql.SQLQuery;
 import org.example.sql.SQLValidator;
 
 import javax.swing.*;
@@ -20,6 +22,8 @@ public class StartAction extends AbstractAction {
 
         SQLParser parser = new SQLParser(text);
         SQLValidator validator = new SQLValidator(text);
+
+
 
         if(!validator.checkSQL1()) {
             MainFrame.getInstance().getLblMessage().setText("Syntax error");
@@ -39,6 +43,12 @@ public class StartAction extends AbstractAction {
 
         if(!validator.checkSQL5(clauses))
             MainFrame.getInstance().getLblMessage().setText("error 5");
+
+        SQLQuery sqlQuery = new SQLQuery(clauses);
+
+        SQLAdapter sqlAdapter = new SQLAdapter(sqlQuery);
+
+        sqlAdapter.getQuery();
 
     }
 }
