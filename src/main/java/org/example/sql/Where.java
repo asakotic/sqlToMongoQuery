@@ -76,7 +76,6 @@ public class Where extends Clause {
             postfix.add(stack.get(i));
         }
 
-        System.out.println(postfix);
 
         return true;
     }

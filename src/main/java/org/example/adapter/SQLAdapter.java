@@ -9,6 +9,15 @@ import java.util.List;
 
 public class SQLAdapter implements ISQLAdapter{
 
+    String select = "";
+    String from = "";
+    String orderBy = "";
+    String groupBy = "";
+    String where = "";
+    String join = "";
+    String join2 = "";
+    String join3 = "";
+
     private SQLQuery sqlQuery;
 
     public SQLAdapter(SQLQuery sqlQuery){
@@ -23,14 +32,8 @@ public class SQLAdapter implements ISQLAdapter{
 
     private String convertSQLQueryToMongoDBQuery(SQLQuery SQLQuery){
 
-        String select = selectConversion(sqlQuery.getSelect());
-        String from = fromConversion(sqlQuery.getFrom());
-        String orderBy = "";
-        String groupBy = "";
-        String where = "";
-        String join = "";
-        String join2 = "";
-        String join3 = "";
+        select = selectConversion(sqlQuery.getSelect());
+        from = fromConversion(sqlQuery.getFrom());
 
         if(sqlQuery.getOrderBy() != null)
             orderBy = orderByConversion(sqlQuery.getOrderBy());
@@ -50,9 +53,47 @@ public class SQLAdapter implements ISQLAdapter{
         if(sqlQuery.getJoin3() != null)
             join3 = joinConversion(sqlQuery.getJoin3());
 
-        System.out.println(where);
+        String query = createQuery();
+
+        System.out.println(query);
         return "";
     }
+
+    private String createQuery(){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("db");
+        sb.append(from);
+
+        if(groupBy.equals("") && join.equals("")){
+            sb.append(".find(");
+            sb.append(where);
+            sb.append(")");
+            sb.append(select);
+            sb.append(orderBy);
+        }else{
+            sb.append(".aggregate([");
+            sb.append(join);
+
+            if(!join.equals(""))
+                sb.append(", ");
+            sb.append(groupBy);
+
+            if(!groupBy.equals(""))
+                sb.append(", ");
+
+            sb.append("{ \"$match\":");
+            sb.append(where);
+
+            sb.append("}])");
+            sb.append(select);
+            sb.append(orderBy);
+        }
+
+
+        return sb.toString();
+    }
+
     private String joinConversion(Join join){
         StringBuilder sb = new StringBuilder();
         sb.append("{$lookup:{ from: ");
@@ -82,7 +123,6 @@ public class SQLAdapter implements ISQLAdapter{
 
         for(int i = 0; i < where.getPostfix().size(); i++){
             if((!where.isKeyword(where.getPostfix().get(i)) && !where.isOperation(where.getPostfix().get(i)))){
-                System.out.println(where.getPostfix() +" "+i);
                 continue;
             }else{
                 if(i-2<0){
@@ -94,8 +134,32 @@ public class SQLAdapter implements ISQLAdapter{
                 String finalS = "";
 
                 if(!where.isOperation(where.getPostfix().get(i))){
-                    finalS ="{" + first + where.getPostfix().get(i) + second +"},";
-                    finalS = finalS.replace("=", ":");
+                    switch (where.getPostfix().get(i).toLowerCase()){
+                        case "=":
+                            finalS ="{" + first + where.getPostfix().get(i) + second +"},";
+                            finalS = finalS.replace("=", ":");
+                            break;
+                        case ">":
+                            finalS = "{" + first + ": {$gt:" + second + "} },";
+                            break;
+                        case "<":
+                            finalS = "{" + first + ": {$lt:" + second + "} },";
+                            break;
+                        case "<=":
+                            finalS = "{" + first + ": {$lte:" + second + "} },";
+                            break;
+                        case ">=":
+                            finalS = "{" + first + ": {$gte:" + second + "} },";
+                            break;
+                        case "like":
+                            finalS = "{" + first + ": /" + second + "/ },";
+                            break;
+                        //case "in":
+                        //    finalS = "{" + first + ": { $in: [" + second + "]}}";
+                        //    break;
+                        default:
+                            break;
+                    }
                 }
                 else
                     finalS = "{\"$" + where.getPostfix().get(i) + "\":[" + first + second + "]},";
@@ -116,8 +180,18 @@ public class SQLAdapter implements ISQLAdapter{
             }
 
         }
+        String pom = where.getPostfix().get(0);
 
-        return where.getPostfix().get(0);
+        for(int i = 0 ; i<pom.length()-1; i++){
+            if(pom.charAt(i) == ','){
+                if(pom.charAt(i+1)==']' || pom.charAt(i+1)=='}')
+                    pom = pom.substring(0, i) + "" + pom.substring(i+1);
+            }
+        }
+
+        pom = pom.substring(0,pom.length()-1);
+
+        return pom;
     }
 
 

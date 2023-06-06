@@ -24,7 +24,6 @@ public class OrderBy extends Clause{
             }
         }
 
-        System.out.println(params);
         return true;
     }
 
