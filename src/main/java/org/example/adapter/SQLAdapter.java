@@ -53,42 +53,16 @@ public class SQLAdapter implements ISQLAdapter{
         if(sqlQuery.getJoin3() != null)
             join3 = joinConversion(sqlQuery.getJoin3());
 
+        System.out.println(groupBy);
+
         String query = createQuery();
 
-        System.out.println(query);
+        System.out.println(join);
         return "";
     }
 
     private String createQuery(){
         StringBuilder sb = new StringBuilder();
-
-        sb.append("db");
-        sb.append(from);
-
-        if(groupBy.equals("") && join.equals("")){
-            sb.append(".find(");
-            sb.append(where);
-            sb.append(")");
-            sb.append(select);
-            sb.append(orderBy);
-        }else{
-            sb.append(".aggregate([");
-            sb.append(join);
-
-            if(!join.equals(""))
-                sb.append(", ");
-            sb.append(groupBy);
-
-            if(!groupBy.equals(""))
-                sb.append(", ");
-
-            sb.append("{ \"$match\":");
-            sb.append(where);
-
-            sb.append("}])");
-            sb.append(select);
-            sb.append(orderBy);
-        }
 
 
         return sb.toString();
@@ -103,7 +77,7 @@ public class SQLAdapter implements ISQLAdapter{
             sb.append("'" + join.getParams().get(3) + "', ");
             sb.append("foreignField: ");
             sb.append("'" + join.getParams().get(3) + "', ");
-            sb.append("as: 'merged'");
+            sb.append("as: 'merged'}}");
         }else{
             if(join.getParams().get(2).equals("(")){
 
@@ -111,10 +85,12 @@ public class SQLAdapter implements ISQLAdapter{
                 sb.append("'" + join.getParams().get(2) + "', ");
                 sb.append("foreignField: ");
                 sb.append("'" + join.getParams().get(4) + "', ");
-                sb.append("as: 'merged'");
+                sb.append("as: 'merged'}}");
             }
         }
-        sb.append("}}, {$unwind: 'merged'}");
+
+        sb = new StringBuilder(sb.toString().replace("'", "\""));
+        //sb.append("}}, {$unwind: 'merged'}");
         return sb.toString();
     }
 
@@ -162,7 +138,7 @@ public class SQLAdapter implements ISQLAdapter{
                     }
                 }
                 else
-                    finalS = "{\"$" + where.getPostfix().get(i) + "\":[" + first + second + "]},";
+                    finalS = "{$" + where.getPostfix().get(i) + ":[" + first + second + "]},";
 
                 where.getPostfix().set(i-2, finalS);
 
@@ -191,14 +167,16 @@ public class SQLAdapter implements ISQLAdapter{
 
         pom = pom.substring(0,pom.length()-1);
 
+        pom = "{ $match:" + pom + "}";
+        pom = pom.replace("'", "\"");
+
         return pom;
     }
-
 
     private String groupByConversion(GroupBy groupBy, Select select){
 
         StringBuilder sb = new StringBuilder();
-        sb.append("{\"$group\" : {_id: {");
+        sb.append("{ $group : {_id: {");
 
         for(int i = 0; i < groupBy.getParams().size(); i++){
             if(i==groupBy.getParams().size()-1){
@@ -213,7 +191,7 @@ public class SQLAdapter implements ISQLAdapter{
             agg = checkAggregation(s);
             if(!agg.equals("")){
                 String pom = s.substring(s.indexOf("(")+1, s.length()-1);
-                sb.append("\""+agg+"\": {\"$"+agg+":" + pom + "\"}, ");
+                sb.append(agg+": {$"+agg+": \"" + pom + "\"}, ");
             }
         }
 
@@ -240,7 +218,7 @@ public class SQLAdapter implements ISQLAdapter{
     }
 
     private String orderByConversion(OrderBy orderBy){
-        StringBuilder sb = new StringBuilder(".sort({");
+        StringBuilder sb = new StringBuilder("{ $sort : { ");
 
         for(int i = 0; i < orderBy.getParams().size(); i+=2){
             int value = 1;
@@ -248,12 +226,12 @@ public class SQLAdapter implements ISQLAdapter{
             else value = -1;
 
             if(i== orderBy.getParams().size()-2)
-                sb.append(orderBy.getParams().get(i)+":"+value);
+                sb.append(orderBy.getParams().get(i)+":"+value+" ");
             else
                 sb.append(orderBy.getParams().get(i)+":"+value+", ");
         }
 
-        sb.append("})");
+        sb.append("}}");
 
         return sb.toString();
     }
@@ -263,19 +241,18 @@ public class SQLAdapter implements ISQLAdapter{
             return "";
         }
 
-        StringBuilder sbR = new StringBuilder(".projection({");
+        StringBuilder sbR = new StringBuilder("{ $project: {");
 
         for(String s : select.getParams()){
             sbR.append("\"" + s+"\":1, ");
         }
 
-        sbR.append("\"_id\":0})");
+        sbR.append("\"_id\":0}}");
 
         return sbR.toString();
     }
 
     private String fromConversion(From from){
-        return ("." + from.getParams().get(0));
+        return (from.getParams().get(0));
     }
-
 }
