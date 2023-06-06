@@ -59,6 +59,7 @@ public class MainFrame extends JFrame {
         jTable.setPreferredScrollableViewportSize(new Dimension(500, 400));
         jTable.setFillsViewportHeight(true);
         //this.add(new JScrollPane(jTable));
+        jTable.setSize(900,900);
         panel.add(jTable,BorderLayout.SOUTH);
         this.add(panel);
 

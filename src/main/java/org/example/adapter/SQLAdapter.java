@@ -4,6 +4,7 @@ import org.example.database.MongoDBQuery;
 import org.example.sql.*;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +32,7 @@ public class SQLAdapter implements ISQLAdapter{
     }
 
 
-    private String convertSQLQueryToMongoDBQuery(SQLQuery SQLQuery){
+    private String convertSQLQueryToMongoDBQuery(SQLQuery SQLQuery) {
 
         select = selectConversion(sqlQuery.getSelect());
         from = fromConversion(sqlQuery.getFrom());
@@ -73,7 +74,7 @@ public class SQLAdapter implements ISQLAdapter{
         return "";
     }
 
-    private String mapper(List<String> param){
+    private String mapper(List<String> param) {
         StringBuilder sb = new StringBuilder();
 
         MongoDBQuery mdbQ = new MongoDBQuery(param);
