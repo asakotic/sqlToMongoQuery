@@ -199,7 +199,31 @@ public class SQLAdapter implements ISQLAdapter{
                             finalS = "{" + first + ": {$gte:" + second + "} },";
                             break;
                         case "like":
-                            finalS = "{" + first + ": /" + second + "/ },";
+                            System.out.println(second);
+                            String q = "";
+                            int countP = 0;
+                            boolean end = false;
+                            for(int t = 0; t < second.length(); t++){
+                                if(second.charAt(t) != '%' && second.charAt(t) != '"'){
+                                    q = q + second.charAt(t);
+                                }
+                                if(second.charAt(t) == '%'){
+                                    countP++;
+                                    if(second.charAt(t+1) == '"')
+                                        end = true;
+                                }
+
+                            }
+
+                            if(countP==2)
+                                finalS = "{" + first + ": /" + q + "/ },";
+                            else{
+                                if(end)
+                                    finalS = "{" + first + ": /^" + q + "/ },";
+                                else
+                                    finalS = "{" + first + ": /" + q + "$/ },";
+                            }
+
                             break;
                         //case "in":
                         //    finalS = "{" + first + ": { $in: [" + second + "]}}";
