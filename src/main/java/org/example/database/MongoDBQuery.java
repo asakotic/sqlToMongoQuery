@@ -62,7 +62,6 @@ public class MongoDBQuery {
 
         List<Row> rows = new ArrayList<>();
 
-
         while (cursor.hasNext()){
             Row row = new Row();
             row.setName(queryParameters.get(0));
@@ -82,18 +81,18 @@ public class MongoDBQuery {
                 }
 
                 row.addField(keyP[i].toString(), s);
+
                 System.out.println(keyP[i].toString());
             }
 
             rows.add(row);
         }
 
-        //TableModel tableModel = new TableModel();
-        //tableModel.setRows(rows);
-        //MainFrame.getInstance().getJTable().setModel(tableModel);
-        //System.out.println(rows);
+        connection.close();
 
         return rows;
     }
+
+
 
 }
