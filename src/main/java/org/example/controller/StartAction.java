@@ -1,11 +1,10 @@
 package org.example.controller;
 
-import org.example.adapter.SQLAdapter;
+import org.example.data.Row;
+import org.example.database.MongoDBQuery;
 import org.example.gui.MainFrame;
-import org.example.sql.Clause;
-import org.example.sql.SQLParser;
-import org.example.sql.SQLQuery;
-import org.example.sql.SQLValidator;
+import org.example.gui.table.TableModel;
+import org.example.sql.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,36 +18,8 @@ public class StartAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         text = MainFrame.getInstance().getTaQuery().getText();
         MainFrame.getInstance().getLblMessage().setText("");
-
-        SQLParser parser = new SQLParser(text);
-        SQLValidator validator = new SQLValidator(text);
-
-
-
-        if(!validator.checkSQL1()) {
-            MainFrame.getInstance().getLblMessage().setText("Syntax error");
-            return;
-        }
-
-        List<Clause> clauses = parser.solve();
-
-        if(!validator.checkSQL2(clauses))
-            MainFrame.getInstance().getLblMessage().setText("error 2");
-
-        if(!validator.checkSQL3(clauses))
-            MainFrame.getInstance().getLblMessage().setText("error 3");
-
-        if(!validator.checkSQL4(clauses))
-            MainFrame.getInstance().getLblMessage().setText("error 4");
-
-        if(!validator.checkSQL5(clauses))
-            MainFrame.getInstance().getLblMessage().setText("error 5");
-
-        SQLQuery sqlQuery = new SQLQuery(clauses);
-
-        SQLAdapter sqlAdapter = new SQLAdapter(sqlQuery);
-
-        sqlAdapter.getQuery();
-
+        MongoDBQuery db = SQLToMongo.convertSQL(text);
+        List<Row> rows = db.executeOnDatabase(MongoDBController.getConnection());
+        MainFrame.getInstance().getJTable().setModel(new TableModel(rows));
     }
 }

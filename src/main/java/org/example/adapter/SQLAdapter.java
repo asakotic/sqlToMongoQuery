@@ -31,12 +31,12 @@ public class SQLAdapter implements ISQLAdapter{
     }
 
     @Override
-    public String getQuery() {
+    public MongoDBQuery getQuery() {
         return convertSQLQueryToMongoDBQuery(sqlQuery);
     }
 
 
-    private String convertSQLQueryToMongoDBQuery(SQLQuery SQLQuery) {
+    private MongoDBQuery convertSQLQueryToMongoDBQuery(SQLQuery SQLQuery) {
 
         select = selectConversion(sqlQuery.getSelect());
         from = fromConversion(sqlQuery.getFrom());
@@ -75,18 +75,15 @@ public class SQLAdapter implements ISQLAdapter{
         params.add(groupBy);
         params.add(orderBy);
 
-        mapper(params);
+        //MONGOQUER = MAPPER(PARAMS)
+        MongoDBQuery mdb = mapper(params);
 
-        System.out.println(join);
-        return "";
+        return mdb;
     }
 
-    private String mapper(List<String> param) {
-        StringBuilder sb = new StringBuilder();
-
+    private MongoDBQuery mapper(List<String> param) {
         MongoDBQuery mdbQ = new MongoDBQuery(param);
-        mdbQ.databaseConnection();
-        return sb.toString();
+        return mdbQ;
     }
 
     private String joinConversion(Join join){

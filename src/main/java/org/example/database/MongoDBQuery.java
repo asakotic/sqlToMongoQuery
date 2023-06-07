@@ -18,14 +18,12 @@ import java.util.*;
 public class MongoDBQuery {
 
     private List<String> queryParameters = new ArrayList<>();
-    private MongoClient connection;
 
     public MongoDBQuery(List<String> params){
         this.queryParameters = params;
-        this.connection = MongoDBController.getConnection();
     }
 
-    public void databaseConnection() {
+    public List<Row> executeOnDatabase(MongoClient connection) {
         MongoDatabase database = connection.getDatabase("bp_tim10");
         System.out.println(queryParameters.get(6));
         System.out.println(queryParameters.get(7));
@@ -46,8 +44,6 @@ public class MongoDBQuery {
             counter.add(6);
             counter.add(7);
         }
-
-        System.out.println(queryParameters.get(2) + " "+ queryParameters.get(3) + " " + queryParameters.get(4) + " " + queryParameters.get(5) + " " + queryParameters.get(8));
 
         if(queryParameters.get(9).equals("")) counter.add(8);
         else counter.add(9);
@@ -78,18 +74,26 @@ public class MongoDBQuery {
             System.out.println(keys + "\n");
             System.out.println(valuesP);
             for(int i = 0; i < keys.size(); i++){
-                row.addField(keyP[i].toString(), valuesP[i]);
+
+                String s = valuesP[i].toString();
+                if(s.contains("Document"))
+                {
+                    s = s.substring(s.indexOf("=")+1, s.length()-2);
+                }
+
+                row.addField(keyP[i].toString(), s);
                 System.out.println(keyP[i].toString());
             }
 
             rows.add(row);
         }
 
-        TableModel tableModel = new TableModel();
+        //TableModel tableModel = new TableModel();
+        //tableModel.setRows(rows);
+        //MainFrame.getInstance().getJTable().setModel(tableModel);
+        //System.out.println(rows);
 
-        tableModel.setRows(rows);
-        MainFrame.getInstance().getJTable().setModel(tableModel);
-        System.out.println(rows);
+        return rows;
     }
 
 }

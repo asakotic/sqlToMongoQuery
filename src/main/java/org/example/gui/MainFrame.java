@@ -2,8 +2,10 @@ package org.example.gui;
 
 import lombok.Data;
 import lombok.Getter;
-import org.example.app.AppCore;
 import org.example.controller.StartAction;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,11 +15,11 @@ import java.awt.*;
 public class MainFrame extends JFrame {
 
     private static MainFrame instance = null;
-    private AppCore appCore;
     private JTable jTable;
     private JButton btnStart;
-    private JTextArea taQuery;
+    private RSyntaxTextArea taQuery;
     private JLabel lblMessage;
+    private RSyntaxTextArea userText;
 
     private MainFrame() {
 
@@ -49,8 +51,8 @@ public class MainFrame extends JFrame {
         this.setLayout(bl);
         lblMessage = new JLabel();
         btnStart = new JButton("Submit");
-        taQuery = new JTextArea("Write something");
-
+        taQuery = new RSyntaxTextArea();
+        taQuery.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_SQL);
         mini.add(lblMessage);
         mini.add(btnStart);
        // panel.add(mini);
@@ -66,7 +68,7 @@ public class MainFrame extends JFrame {
         //panel.add(scrollpane);
         //panel.add(jTable,bl);
         this.add(mini,BorderLayout.NORTH);
-        this.add(taQuery,BorderLayout.CENTER);
+        this.add(new RTextScrollPane(taQuery), BorderLayout.CENTER);
         this.add(new JScrollPane(jTable), BorderLayout.SOUTH);
 
         //this.pack();
@@ -75,12 +77,5 @@ public class MainFrame extends JFrame {
 
         btnStart.addActionListener(new StartAction());
     }
-
-    public void setAppCore(AppCore appCore) {
-        this.appCore = appCore;
-        this.jTable.setModel(appCore.getTableModel());
-    }
-
-
 
 }

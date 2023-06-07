@@ -1,5 +1,6 @@
 package org.example.gui.table;
 
+import com.mongodb.internal.connection.tlschannel.TrackingAllocator;
 import org.example.data.Row;
 
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +10,13 @@ import java.util.Vector;
 public class TableModel extends DefaultTableModel {
     private List<Row> rows;
 
+    public TableModel(){
+
+    }
+
+    public TableModel(List<Row> rows){
+        setRows(rows);
+    }
 
     private void updateModel(){
 

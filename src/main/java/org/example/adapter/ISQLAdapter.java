@@ -1,5 +1,7 @@
 package org.example.adapter;
 
+import org.example.database.MongoDBQuery;
+
 public interface ISQLAdapter {
-    String getQuery();
+    MongoDBQuery getQuery();
 }
