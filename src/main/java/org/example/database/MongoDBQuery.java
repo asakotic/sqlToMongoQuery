@@ -29,19 +29,28 @@ public class MongoDBQuery {
         MongoDatabase database = connection.getDatabase("bp_tim10");
         System.out.println(queryParameters.get(6));
         System.out.println(queryParameters.get(7));
+        System.out.println(queryParameters.get(8));
 
         List<Integer> counter = new ArrayList<>();
 
         if(!queryParameters.get(1).equals("")) counter.add(1);
-        if(!queryParameters.get(2).equals("")) counter.add(2);
-        if(!queryParameters.get(3).equals("")) counter.add(3);
-        if(!queryParameters.get(4).equals("")) counter.add(4);
-        if(queryParameters.get(6).equals("")) counter.add(5);
-        else counter.add(6);
-        if(!queryParameters.get(7).equals("")) counter.add(7);
+        if(!queryParameters.get(2).equals("")) {
+            counter.add(2);
+            counter.add(3);
+        }
+        if(!queryParameters.get(4).equals("")) {
+            counter.add(4);
+            counter.add(5);
+        }
+        if(!queryParameters.get(6).equals("")) {
+            counter.add(6);
+            counter.add(7);
+        }
+        if(queryParameters.get(9).equals("")) counter.add(8);
+        else counter.add(9);
+        if(!queryParameters.get(10).equals("")) counter.add(10);
 
         Document[] submit = new Document[counter.size()];
-
         for(int i = 0; i<counter.size();i++){
             submit[i] = Document.parse(queryParameters.get(counter.get(i)));
         }

@@ -38,30 +38,36 @@ public class MainFrame extends JFrame {
         Dimension screenSize = kit.getScreenSize();
         int screenHeight = (int) screenSize.getHeight();
         int screenWidth = (int) screenSize.getWidth();
-        this.setSize(screenWidth / 2, screenHeight / 2 + 100);
+        this.setSize(screenWidth / 2, screenHeight / 2 + 300);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("BP");
 
         JPanel panel = new JPanel();
         JPanel mini = new JPanel();
-        BorderLayout borderLayout = new BorderLayout();
-        panel.setLayout(borderLayout);
+        BorderLayout bl= new BorderLayout();
+        this.setLayout(bl);
         lblMessage = new JLabel();
         btnStart = new JButton("Submit");
         taQuery = new JTextArea("Write something");
+
         mini.add(lblMessage);
         mini.add(btnStart);
-        panel.add(mini,BorderLayout.NORTH);
-        panel.add(taQuery,BorderLayout.CENTER);
+       // panel.add(mini);
+       // panel.add(taQuery);
+
 
         jTable = new JTable();
-        jTable.setPreferredScrollableViewportSize(new Dimension(500, 400));
+        //jTable.setPreferredScrollableViewportSize(new Dimension(500, 400));
         jTable.setFillsViewportHeight(true);
         //this.add(new JScrollPane(jTable));
-        jTable.setSize(900,900);
-        panel.add(jTable,BorderLayout.SOUTH);
-        this.add(panel);
+        //jTable.setSize(900,900);
+        //JScrollPane scrollpane = new JScrollPane(jTable);
+        //panel.add(scrollpane);
+        //panel.add(jTable,bl);
+        this.add(mini,BorderLayout.NORTH);
+        this.add(taQuery,BorderLayout.CENTER);
+        this.add(new JScrollPane(jTable), BorderLayout.SOUTH);
 
         //this.pack();
         //this.setLocationRelativeTo(null);

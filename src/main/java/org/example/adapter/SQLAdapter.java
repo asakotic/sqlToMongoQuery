@@ -19,6 +19,7 @@ public class SQLAdapter implements ISQLAdapter{
     String join = "";
     String join2 = "";
     String join3 = "";
+    String unwind = "{$unwind: \"$merged\"}";
 
     private SQLQuery sqlQuery;
 
@@ -62,8 +63,11 @@ public class SQLAdapter implements ISQLAdapter{
         params.add(from);
         params.add(where);
         params.add(join);
+        params.add(unwind);
         params.add(join2);
+        params.add(unwind);
         params.add(join3);
+        params.add(unwind);
         params.add(select);
         params.add(groupBy);
         params.add(orderBy);
