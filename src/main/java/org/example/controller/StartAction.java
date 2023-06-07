@@ -20,6 +20,7 @@ public class StartAction extends AbstractAction {
         MainFrame.getInstance().getLblMessage().setText("");
         MongoDBQuery db = SQLToMongo.convertSQL(text);
         List<Row> rows = db.executeOnDatabase(MongoDBController.getConnection());
-        MainFrame.getInstance().getJTable().setModel(new TableModel(rows));
+        if(!rows.isEmpty())
+            MainFrame.getInstance().getJTable().setModel(new TableModel(rows));
     }
 }

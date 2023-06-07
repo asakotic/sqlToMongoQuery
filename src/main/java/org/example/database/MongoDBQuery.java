@@ -4,15 +4,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.example.controller.MongoDBController;
 import org.example.data.Row;
-import org.example.gui.MainFrame;
-import org.example.gui.table.TableModel;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.*;
 
 public class MongoDBQuery {
@@ -25,9 +18,6 @@ public class MongoDBQuery {
 
     public List<Row> executeOnDatabase(MongoClient connection) {
         MongoDatabase database = connection.getDatabase("bp_tim10");
-        System.out.println(queryParameters.get(6));
-        System.out.println(queryParameters.get(7));
-        System.out.println(queryParameters.get(8));
 
         List<Integer> counter = new ArrayList<>();
 
@@ -45,8 +35,9 @@ public class MongoDBQuery {
             counter.add(7);
         }
 
-        if(queryParameters.get(9).equals("")) counter.add(8);
-        else counter.add(9);
+        if(queryParameters.get(9).equals("")){
+            if(!queryParameters.get(8).equals("")) counter.add(8);
+        } else counter.add(9);
         if(!queryParameters.get(10).equals("")) counter.add(10);
 
         Document[] submit = new Document[counter.size()];
@@ -70,29 +61,19 @@ public class MongoDBQuery {
             Object[] keyP = keys.toArray();
             Collection<Object> values = d.values();
             Object[] valuesP = values.toArray();
-            System.out.println(keys + "\n");
-            System.out.println(valuesP);
             for(int i = 0; i < keys.size(); i++){
-
                 String s = valuesP[i].toString();
                 if(s.contains("Document"))
                 {
                     s = s.substring(s.indexOf("=")+1, s.length()-2);
                 }
-
                 row.addField(keyP[i].toString(), s);
-
-                System.out.println(keyP[i].toString());
             }
 
             rows.add(row);
         }
 
         connection.close();
-
         return rows;
     }
-
-
-
 }

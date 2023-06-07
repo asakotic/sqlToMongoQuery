@@ -3,10 +3,7 @@ package org.example.adapter;
 import org.example.database.MongoDBQuery;
 import org.example.sql.*;
 
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SQLAdapter implements ISQLAdapter{
@@ -58,8 +55,6 @@ public class SQLAdapter implements ISQLAdapter{
 
         if(sqlQuery.getJoin3() != null)
             join3 = join3Conversion(sqlQuery.getJoin3());
-
-        System.out.println(groupBy);
 
         List<String> params = new ArrayList<>();
 

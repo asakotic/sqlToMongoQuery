@@ -19,21 +19,28 @@ public class SQLToMongo {
 
         List<Clause> clauses = parser.solve();
 
-        if(!validator.checkSQL2(clauses))
-            MainFrame.getInstance().getLblMessage().setText("error 2");
+        if(!validator.checkSQL2(clauses)){
+            MainFrame.getInstance().getLblMessage().setText("Syntax error: Group by");
+            return null;
+        }
 
-        if(!validator.checkSQL3(clauses))
-            MainFrame.getInstance().getLblMessage().setText("error 3");
+        if(!validator.checkSQL3(clauses)){
+            MainFrame.getInstance().getLblMessage().setText("Syntax error: Where");
+            return null;
+        }
 
-        if(!validator.checkSQL4(clauses))
-            MainFrame.getInstance().getLblMessage().setText("error 4");
+        if(!validator.checkSQL4(clauses)){
+            MainFrame.getInstance().getLblMessage().setText("Syntax error: Join");
+            return null;
+        }
 
-        if(!validator.checkSQL5(clauses))
-            MainFrame.getInstance().getLblMessage().setText("error 5");
+        if(!validator.checkSQL5(clauses)){
+            MainFrame.getInstance().getLblMessage().setText("Syntax error: Clause error");
+            return null;
+        }
 
         SQLQuery sqlQuery = new SQLQuery(clauses);
         SQLAdapter sqlAdapter = new SQLAdapter(sqlQuery);
-
         return sqlAdapter.getQuery();
     }
 

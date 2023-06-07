@@ -1,6 +1,5 @@
 package org.example.gui.table;
 
-import com.mongodb.internal.connection.tlschannel.TrackingAllocator;
 import org.example.data.Row;
 
 import javax.swing.table.DefaultTableModel;
