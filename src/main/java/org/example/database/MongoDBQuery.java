@@ -46,6 +46,9 @@ public class MongoDBQuery {
             counter.add(6);
             counter.add(7);
         }
+
+        System.out.println(queryParameters.get(2) + " "+ queryParameters.get(3) + " " + queryParameters.get(4) + " " + queryParameters.get(5) + " " + queryParameters.get(8));
+
         if(queryParameters.get(9).equals("")) counter.add(8);
         else counter.add(9);
         if(!queryParameters.get(10).equals("")) counter.add(10);
@@ -72,7 +75,8 @@ public class MongoDBQuery {
             Object[] keyP = keys.toArray();
             Collection<Object> values = d.values();
             Object[] valuesP = values.toArray();
-
+            System.out.println(keys + "\n");
+            System.out.println(valuesP);
             for(int i = 0; i < keys.size(); i++){
                 row.addField(keyP[i].toString(), valuesP[i]);
                 System.out.println(keyP[i].toString());

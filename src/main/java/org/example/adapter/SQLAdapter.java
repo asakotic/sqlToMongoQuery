@@ -19,7 +19,10 @@ public class SQLAdapter implements ISQLAdapter{
     String join = "";
     String join2 = "";
     String join3 = "";
-    String unwind = "{$unwind: \"$merged\"}";
+
+    String unwind1 = "{$unwind: { path: \"$merged1\", preserveNullAndEmptyArrays: true }}";
+    String unwind2 = "{$unwind: { path: \"$merged2\", preserveNullAndEmptyArrays: true }}";
+    String unwind3 = "{$unwind: { path: \"$merged3\", preserveNullAndEmptyArrays: true }}";
 
     private SQLQuery sqlQuery;
 
@@ -51,10 +54,10 @@ public class SQLAdapter implements ISQLAdapter{
             join = joinConversion(sqlQuery.getJoin());
 
         if(sqlQuery.getJoin2() != null)
-            join2 = joinConversion(sqlQuery.getJoin2());
+            join2 = join2Conversion(sqlQuery.getJoin2());
 
         if(sqlQuery.getJoin3() != null)
-            join3 = joinConversion(sqlQuery.getJoin3());
+            join3 = join3Conversion(sqlQuery.getJoin3());
 
         System.out.println(groupBy);
 
@@ -63,11 +66,11 @@ public class SQLAdapter implements ISQLAdapter{
         params.add(from);
         params.add(where);
         params.add(join);
-        params.add(unwind);
+        params.add(unwind1);
         params.add(join2);
-        params.add(unwind);
+        params.add(unwind2);
         params.add(join3);
-        params.add(unwind);
+        params.add(unwind3);
         params.add(select);
         params.add(groupBy);
         params.add(orderBy);
@@ -87,7 +90,9 @@ public class SQLAdapter implements ISQLAdapter{
     }
 
     private String joinConversion(Join join){
+
         StringBuilder sb = new StringBuilder();
+
         sb.append("{$lookup:{ from: ");
         sb.append("'" + join.getParams().get(0) + "', ");
         sb.append("localField: ");
@@ -95,7 +100,7 @@ public class SQLAdapter implements ISQLAdapter{
             sb.append("'" + join.getParams().get(3) + "', ");
             sb.append("foreignField: ");
             sb.append("'" + join.getParams().get(3) + "', ");
-            sb.append("as: 'merged'}}");
+            sb.append("as: 'merged1" + "'}}");
         }else{
             if(join.getParams().get(2).equals("(")){
 
@@ -103,7 +108,63 @@ public class SQLAdapter implements ISQLAdapter{
                 sb.append("'" + join.getParams().get(2) + "', ");
                 sb.append("foreignField: ");
                 sb.append("'" + join.getParams().get(4) + "', ");
-                sb.append("as: 'merged'}}");
+                sb.append("as: 'merged1" + "'}}");
+            }
+        }
+
+        sb = new StringBuilder(sb.toString().replace("'", "\""));
+        //sb.append("}}, {$unwind: 'merged'}");
+        return sb.toString();
+    }
+
+    private String join2Conversion(Join join){
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{$lookup:{ from: ");
+        sb.append("'" + join.getParams().get(0) + "', ");
+        sb.append("localField: \"merged1.");
+        if(join.getParams().get(1).equalsIgnoreCase("USING")){
+            sb.append(join.getParams().get(3) + "', ");
+            sb.append("foreignField: ");
+            sb.append("'" + join.getParams().get(3) + "', ");
+            sb.append("as: 'merged2" + "'}}");
+        }else{
+            if(join.getParams().get(2).equals("(")){
+
+            }else {
+                sb.append(join.getParams().get(2) + "', ");
+                sb.append("foreignField: ");
+                sb.append("'" + join.getParams().get(4) + "', ");
+                sb.append("as: 'merged2" + "'}}");
+            }
+        }
+
+        sb = new StringBuilder(sb.toString().replace("'", "\""));
+        //sb.append("}}, {$unwind: 'merged'}");
+        return sb.toString();
+    }
+
+    private String join3Conversion(Join join){
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{$lookup:{ from: ");
+        sb.append("'" + join.getParams().get(0) + "', ");
+        sb.append("localField: \"merged2.");
+        if(join.getParams().get(1).equalsIgnoreCase("USING")){
+            sb.append(join.getParams().get(3) + "', ");
+            sb.append("foreignField: ");
+            sb.append("'" + join.getParams().get(3) + "', ");
+            sb.append("as: 'merged3" + "'}}");
+        }else{
+            if(join.getParams().get(2).equals("(")){
+
+            }else {
+                sb.append(join.getParams().get(2) + "', ");
+                sb.append("foreignField: ");
+                sb.append("'" + join.getParams().get(4) + "', ");
+                sb.append("as: 'merged3" + "'}}");
             }
         }
 
