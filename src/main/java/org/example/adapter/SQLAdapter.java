@@ -32,7 +32,6 @@ public class SQLAdapter implements ISQLAdapter{
         return convertSQLQueryToMongoDBQuery(sqlQuery);
     }
 
-
     private MongoDBQuery convertSQLQueryToMongoDBQuery(SQLQuery SQLQuery) {
 
         select = selectConversion(sqlQuery.getSelect());
