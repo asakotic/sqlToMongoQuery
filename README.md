@@ -1,9 +1,3 @@
-# Projekat baze podataka
-
-Ana Šakotić RN68/21 i Mehmedalija Karišik RN4/21
-
-"Digitalna televizija (npr. EON)
-
-Evidencija kanala, kategorija sadrzaja, konkretnog programa, video klub... + raspored TV programa (kada, na kom kanalu, u kom terminu se emituje koji sadrzaj u nekom periodu)"
-
-bp_tim_10 mMXSLLngKoRQXa2W bp_tim_10 writer mMXSLLngKoRQXa2W
+A tool for user interaction with MongoDB using SQL queries. 
+The tool will allow the user to write SQL queries, which will then be validated, parsed and translated into the appropriate format (MongoQL).
+The translated query will be run in the Mongo database and the returned collection of documents will be organized into a structure suitable for tabulation.
